@@ -92,7 +92,7 @@ class APICaller {
 //            print("data Received \(data.description)")
             do {
                 let results = try JSONDecoder().decode(TrendingTitleResponse.self, from: data)
-//                print("data Received \(results)")
+                print("data Received \(results)")
                 
                 completion(.success(results.results))
             } catch {

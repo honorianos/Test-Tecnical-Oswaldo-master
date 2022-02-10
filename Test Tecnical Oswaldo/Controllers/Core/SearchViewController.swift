@@ -61,17 +61,6 @@ class SearchViewController: UIViewController {
         }
         else {
             title = "Buscador Offline"
-            DataPersistenceManager.shared.SearchTitleWith(model : " ") { [weak self] result in
-                switch result {
-                case .success(let titles):
-                    self?.titles = titles
-                    DispatchQueue.main.async {
-                        self?.discoverTable.reloadData()
-                    }
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
         }
  
     }
@@ -120,7 +109,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
             return
         }
         
-        
+        CustomLoader.instance.showLoaderView()
         APICaller.shared.getMovie(with: titleName) { [weak self] result in
             switch result {
             case .success(let videoElement):
@@ -130,8 +119,10 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
                     self?.navigationController?.pushViewController(vc, animated: true)
                 }
 
-                
+                CustomLoader.instance.hideLoaderView()
+
             case .failure(let error):
+                CustomLoader.instance.hideLoaderView()
                 print(error.localizedDescription)
             }
         }

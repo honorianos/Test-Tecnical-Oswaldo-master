@@ -105,6 +105,7 @@ extension CollectionViewTableViewCell: UICollectionViewDelegate, UICollectionVie
         print("ejecuta aqui")
         if Reachability.isConnectedToNetwork(){
             print("Internet Connection Available!")
+            CustomLoader.instance.showLoaderView()
             APICaller.shared.getMovie(with: titleName + " trailer") { [weak self] result in
                 switch result {
                 case .success(let videoElement):
@@ -118,8 +119,9 @@ extension CollectionViewTableViewCell: UICollectionViewDelegate, UICollectionVie
                     }
                     let viewModel = TitlePreviewViewModel(title: titleName, youtubeView: videoElement, titleOverview: titleOverview)
                     self?.delegate?.collectionViewTableViewCellDidTapCell(strongSelf, viewModel: viewModel)
-                    
+                    CustomLoader.instance.hideLoaderView()
                 case .failure(let error):
+                    CustomLoader.instance.hideLoaderView()
                     print(error.localizedDescription)
                 }
                 
